@@ -28,9 +28,9 @@ namespace NetworkAlertSystem
 
             NetworkUsageData[] NiDataUsage = new NetworkUsageData[instancename.Length];
            
-
             for (int i = 0; i < instancename.Length; i++)
             {
+                
                 PerformanceCounter dataSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancename[i]);
                 PerformanceCounter dataReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancename[i]);
                 dataSentCounter.NextValue();
@@ -43,8 +43,10 @@ namespace NetworkAlertSystem
                 NiDataUsage[i].Name = instancename[i];
                 NiDataUsage[i].ReceivedMbps = dataReceivedCounter.NextValue() * 8 / 1000 / 1000;
                 NiDataUsage[i].SentMbps = dataSentCounter.NextValue() * 8 /1000 / 1000; 
-                Console.WriteLine(NiDataUsage[i].ReceivedMbps);
+                Console.WriteLine(string.Format("{0} \r\n Received: {1}Mbps \r\n Sent: {2}Mbps", NiDataUsage[i].Name,Math.Round(NiDataUsage[i].ReceivedMbps,2),Math.Round(NiDataUsage[i].SentMbps,2)));
+                
             }
+            Console.WriteLine();
             return NiDataUsage;
         }
     }
