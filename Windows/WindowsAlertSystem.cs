@@ -21,6 +21,11 @@ namespace NetworkAlertSystem
             Notification.ShowBalloonTip(1);
             Notification.Dispose();
 
+            ConsoleColor previous = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Threshhold Reached!");
+            Console.ForegroundColor = previous;
+
         }
     }
 }

@@ -22,31 +22,37 @@ namespace NetworkAlertSystem
 
         public override NetworkUsageData[] GetAllInterfacesDataUsage()
         {
-            
+            Console.WriteLine();
+            Console.WriteLine(System.DateTime.Now.TimeOfDay);
+
             PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
             String[] instancename = category.GetInstanceNames();
+            int NumberOfNetworkCards = instancename.Length;
 
-            NetworkUsageData[] NiDataUsage = new NetworkUsageData[instancename.Length];
-           
-            for (int i = 0; i < instancename.Length; i++)
+            NetworkUsageData[] NiDataUsage = new NetworkUsageData[NumberOfNetworkCards];
+            PerformanceCounter[] dataSentCounter = new PerformanceCounter[NumberOfNetworkCards];
+            PerformanceCounter[] dataReceivedCounter = new PerformanceCounter[NumberOfNetworkCards];
+
+            for (int i = 0; i < NumberOfNetworkCards; i++) {
+                dataSentCounter[i] = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancename[i]);
+                dataReceivedCounter[i] = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancename[i]);
+                dataSentCounter[i].NextValue();
+                dataReceivedCounter[i].NextValue();
+            }
+
+            Thread.Sleep(1000);
+
+            for (int i = 0; i < NumberOfNetworkCards; i++)
             {
-                
-                PerformanceCounter dataSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instancename[i]);
-                PerformanceCounter dataReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", instancename[i]);
-                dataSentCounter.NextValue();
-                dataReceivedCounter.NextValue();
-
-                Thread.Sleep(1000);
-                PerformanceCounter bandwidthCounter = new PerformanceCounter("Network Interface", "Current Bandwidth", instancename[i]);
-                float bandwidth = bandwidthCounter.NextValue();
                 NiDataUsage[i] = new NetworkUsageData();
                 NiDataUsage[i].Name = instancename[i];
-                NiDataUsage[i].ReceivedMbps = dataReceivedCounter.NextValue() * 8 / 1000 / 1000;
-                NiDataUsage[i].SentMbps = dataSentCounter.NextValue() * 8 /1000 / 1000; 
+                NiDataUsage[i].ReceivedMbps = dataReceivedCounter[i].NextValue() * 8 / 1000 / 1000;
+                NiDataUsage[i].SentMbps = dataSentCounter[i].NextValue() * 8 /1000 / 1000;
+
                 Console.WriteLine(string.Format("{0} \r\n Received: {1}Mbps \r\n Sent: {2}Mbps", NiDataUsage[i].Name,Math.Round(NiDataUsage[i].ReceivedMbps,2),Math.Round(NiDataUsage[i].SentMbps,2)));
                 
             }
-            Console.WriteLine();
+            
             return NiDataUsage;
         }
     }
