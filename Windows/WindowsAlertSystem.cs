@@ -9,6 +9,8 @@ namespace NetworkAlertSystem
 {
     class WindowsAlertSystem : AlertSystem
     {
+        public override void PrintCurrentData(NetworkUsageData[] NiDataUsageCollection) { }
+
         public override void AlertUserIsOverThreshHold(string Message = "You are currently over the threshold!")
         {
             NotifyIcon Notification = new NotifyIcon();
@@ -21,10 +23,7 @@ namespace NetworkAlertSystem
             Notification.ShowBalloonTip(1);
             Notification.Dispose();
 
-            ConsoleColor previous = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Threshhold Reached!");
-            Console.ForegroundColor = previous;
+            
 
         }
     }

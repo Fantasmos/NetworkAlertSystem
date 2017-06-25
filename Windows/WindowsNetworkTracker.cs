@@ -22,8 +22,7 @@ namespace NetworkAlertSystem
 
         public override NetworkUsageData[] GetAllInterfacesDataUsage()
         {
-            Console.WriteLine();
-            Console.WriteLine(System.DateTime.Now.TimeOfDay);
+            
 
             PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
             String[] instancename = category.GetInstanceNames();
@@ -48,9 +47,6 @@ namespace NetworkAlertSystem
                 NiDataUsage[i].Name = instancename[i];
                 NiDataUsage[i].ReceivedMbps = dataReceivedCounter[i].NextValue() * 8 / 1000 / 1000;
                 NiDataUsage[i].SentMbps = dataSentCounter[i].NextValue() * 8 /1000 / 1000;
-
-                Console.WriteLine(string.Format("{0} \r\n Received: {1}Mbps \r\n Sent: {2}Mbps", NiDataUsage[i].Name,Math.Round(NiDataUsage[i].ReceivedMbps,2),Math.Round(NiDataUsage[i].SentMbps,2)));
-                
             }
             
             return NiDataUsage;

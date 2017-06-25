@@ -11,11 +11,15 @@ namespace NetworkAlertSystem
             Console.WriteLine("The threshold is set to: " + ThreshHold + "Mbps");
             WindowsNetworkTracker Tracker = new WindowsNetworkTracker();
             WindowsAlertSystem Alerter = new WindowsAlertSystem();
+            ConsoleAlert ConsoleNotifier = new ConsoleAlert();
             while (running)
             {
                 NetworkUsageData[] Usage = Tracker.GetAllInterfacesDataUsage();
+                ConsoleNotifier.PrintCurrentData(Usage);
+
                 if (Tracker.CheckIfOverThreshHold(Usage, ThreshHold)) {
                     Alerter.AlertUserIsOverThreshHold();
+                    ConsoleNotifier.AlertUserIsOverThreshHold();
                 }
             }
         }
