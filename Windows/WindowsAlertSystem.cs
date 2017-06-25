@@ -10,21 +10,17 @@ namespace NetworkAlertSystem
     class WindowsAlertSystem : AlertSystem
     {
         public override void PrintCurrentData(NetworkUsageData[] NiDataUsageCollection) { }
+        NotifyIcon Notification = new NotifyIcon();
 
-        public override void AlertUserIsOverThreshHold(string Message = "You are currently over the threshold!")
-        {
-            NotifyIcon Notification = new NotifyIcon();
-            Notification.Visible = true;
-
+        public WindowsAlertSystem() {
             Notification.Icon = System.Drawing.SystemIcons.Information;
             Notification.BalloonTipTitle = "Network Usage Tracker";
             Notification.BalloonTipText = "You are currently over the threshold!";
-
+        }
+        public override void AlertUserIsOverThreshHold(string Message = "You are currently over the threshold!")
+        {
+            Notification.Visible = true;
             Notification.ShowBalloonTip(1);
-            Notification.Dispose();
-
-            
-
         }
     }
 }
